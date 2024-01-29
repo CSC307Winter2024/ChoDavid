@@ -1,32 +1,61 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+'use client';
+
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import Project from './components/project';
 
 export default function Home() {
+  const [resume, setResume] = useState({ skills: ['skill1', 'skill2']});
+  const [newSkill, setNewSkill] = useState('');
+    
+  const handler = async function() {
+    const response = await fetch('/api/jobs');
+    const projects = await response.json();
+    setResume({ ...resume, projects: projects  });
+  };
+
+  useEffect(() => {
+    handler();
+  }, []);
+
+  const projList = resume.projects?.map((proj, idx) => {
+    return (
+      <Project project={proj} index={idx} key={idx}></Project>
+    );
+  });
+
+  const skillList = resume.skills?.map((skill, idx) => {
+    return (
+      <li key='idx'>{skill}</li>
+    );
+  });
+
+  function skillChanged(event) {
+    setNewSkill(event.target.value);
+  }
+
+  function addSkill() {
+    const skills = resume.skills;
+    skills.push(newSkill);
+    setResume({...resume});
+    setNewSkill('');
+  }
+
   return (
     <main>
+      <h1>Here is my Resume</h1>
+      <h2>Projects</h2>
+      <ul>
+        {projList}
+      </ul>
+      <h2>Skills</h2>
+      <ul>{skillList}</ul>
+
+      <hr/>
       <div>
-        <h1>David Cho</h1>
-        <br></br>
-        <section>
-          <h2>Skills</h2>
-          <li>Python</li>
-          <li>Java</li>
-          <li>Javascript</li>
-          <li>C</li>
-        </section>
-        <section>
-          <br></br>
-          <h3>Projects</h3>
-          <li>Project1</li>
-          <li>Project2</li>
-          <li>Project3</li>
-        </section>
-        <section>
-          <br></br>
-          <h4>Jobs</h4>
-          <li>Software Engineering Intern</li>
-          <li>IT Intern</li>
-        </section>
+        <label>New Skill:</label>
+        <input type="text" value={newSkill} onChange={skillChanged}/>
+        <button onClick={addSkill}>Add</button>
       </div>
     </main>
   );
