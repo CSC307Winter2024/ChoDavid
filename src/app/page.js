@@ -43,7 +43,7 @@ export default function Home() {
 
   return (
     <main>
-      <h1>Here is my Resume</h1>
+      <h1>David Cho</h1>
       <h2>Projects</h2>
       <ul>
         {projList}
@@ -51,6 +51,10 @@ export default function Home() {
       <h2>Skills</h2>
       <ul>{skillList}</ul>
 
+      <section> 
+        <h2>Education</h2>
+        <ul>education_list</ul>
+      </section>
       <hr/>
       <div>
         <label>New Skill:</label>
